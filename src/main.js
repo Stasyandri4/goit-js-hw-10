@@ -9,6 +9,7 @@ form.addEventListener('submit', event => {
   const drink = formDrink.get('drink');
   const decision = new FormData(event.target);
   const row = addOrderRow(drink);
+  console.log(row);
 
   makeOrder(PREP_TIME[drink], decision.get('state') === 'fulfilled')
     .then(delay => {
@@ -46,6 +47,6 @@ function addOrderRow(name) {
     'beforeend',
     `<li class="row-pending">⏳ ${name} у роботі </li>`
   );
-  const row = document.querySelector('.row-pending');
+  const row = orderLog.lastElementChild;
   return row;
 }
