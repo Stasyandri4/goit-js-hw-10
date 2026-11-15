@@ -2,29 +2,27 @@ import { PREP_TIME } from './js/menu.js';
 
 const form = document.querySelector('.form');
 const orderLog = document.querySelector('.order-log');
-let drink;
 
 form.addEventListener('submit', event => {
   event.preventDefault();
   const formDrink = new FormData(event.target);
-  drink = formDrink.get('drink');
+  const drink = formDrink.get('drink');
   const decision = new FormData(event.target);
   const row = addOrderRow(drink);
-  console.log(row);
-  const change = row.querySelector('.row-pending');
+
   makeOrder(PREP_TIME[drink], decision.get('state') === 'fulfilled')
     .then(delay => {
-      change.classList.remove('row-pending');
-      change.classList.add('row-ok');
-      change.textContent = `✅ ${drink} · готове · ${delay} ms`;
+      row.classList.remove('row-pending');
+      row.classList.add('row-ok');
+      row.textContent = `✅ ${drink} · готове · ${delay} ms`;
     })
     .catch(delay => {
-      change.classList.remove('row-pending');
-      change.classList.add('row-err');
-      change.textContent = `❌ ${drink} · скасовано · ${delay} ms`;
+      row.classList.remove('row-pending');
+      row.classList.add('row-err');
+      row.textContent = `❌ ${drink} · скасовано · ${delay} ms`;
     })
     .finally(() => {
-      change.insertAdjacentText(
+      row.insertAdjacentText(
         'beforeend',
         ` · ${new Date().toLocaleTimeString('uk-UA')}`
       );
@@ -48,5 +46,6 @@ function addOrderRow(name) {
     'beforeend',
     `<li class="row-pending">⏳ ${name} у роботі </li>`
   );
-  return orderLog;
+  const row = document.querySelector('.row-pending');
+  return row;
 }
